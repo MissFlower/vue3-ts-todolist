@@ -2,7 +2,7 @@
 	<div class="flex items-center space-x-4px">
 		<Checkbox v-bind="$attrs" class="w-24px" @change="checkAllHandle" />
 		<Input
-			v-model:value="keyword"
+			v-model:value.trim="keyword"
 			placeholder="What need to be done?"
 			class="flex-1"
 			@press-enter="addHandle"

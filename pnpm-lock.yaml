@@ -38,6 +38,7 @@ specifiers:
   vite-plugin-windicss: ^1.6.3
   vue: ^3.2.25
   vue-eslint-parser: ^8.2.0
+  vue-router: '4'
   vue-tsc: ^0.29.8
   windicss: ^3.4.3
 
@@ -48,6 +49,7 @@ dependencies:
   nanoid: 3.2.0
   sortablejs: 1.14.0
   vue: 3.2.29
+  vue-router: 4.0.12_vue@3.2.29
 
 devDependencies:
   '@commitlint/cli': 16.1.0_@types+node@17.0.15
@@ -701,6 +703,10 @@ packages:
     dependencies:
       '@vue/compiler-dom': 3.2.29
       '@vue/shared': 3.2.29
+    dev: false
+
+  /@vue/devtools-api/6.0.12:
+    resolution: {integrity: sha512-iO/4FIezHKXhiDBdKySCvJVh8/mZPxHpiQrTy+PXVqJZgpTPTdHy4q8GXulaY+UKEagdkBb0onxNQZ0LNiqVhw==}
     dev: false
 
   /@vue/reactivity-transform/3.2.29:
@@ -3889,6 +3895,15 @@ packages:
     transitivePeerDependencies:
       - supports-color
     dev: true
+
+  /vue-router/4.0.12_vue@3.2.29:
+    resolution: {integrity: sha512-CPXvfqe+mZLB1kBWssssTiWg4EQERyqJZes7USiqfW9B5N2x+nHlnsM1D3b5CaJ6qgCvMmYJnz+G0iWjNCvXrg==}
+    peerDependencies:
+      vue: ^3.0.0
+    dependencies:
+      '@vue/devtools-api': 6.0.12
+      vue: 3.2.29
+    dev: false
 
   /vue-tsc/0.29.8_typescript@4.5.5:
     resolution: {integrity: sha512-pT0wLRjvRuSmB+J4WJT6uuV9mO0KtSSXEAtaVXZQzyk5+DJdbLIQTbRce/TXSkfqt1l1WogO78RjtOJFiMCgfQ==}

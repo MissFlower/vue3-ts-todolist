@@ -8,7 +8,7 @@
 				:type="currentIndex === value ? 'primary' : undefined"
 				class="w-100px"
 				@click="clickHandle(value)"
-				>{{ value }}</Button
+				>{{ capitalize(value) }}</Button
 			>
 		</div>
 		<div class="w-136px">
@@ -20,29 +20,34 @@
 <script setup lang="ts">
 	import { ExclamationCircleOutlined } from '@ant-design/icons-vue'
 	import { Button, Modal } from 'ant-design-vue'
-	import { createVNode, ref } from 'vue'
+	import { createVNode, ref, watch } from 'vue'
 	import { TodoStatusEnum } from 'src/enums/todo'
+	import { capitalize } from 'src/utils'
+	import { useRouter } from 'vue-router'
 
-	withDefaults(
+	const props = withDefaults(
 		defineProps<{
 			num: number | string
 			showClearBtn: boolean
+			status: TodoStatusEnum
 		}>(),
 		{
 			num: 0,
 			showClearBtn: false
 		}
 	)
-	const emit =
-		defineEmits<{ (e: 'change', current: TodoStatusEnum): void; (e: 'complete'): void }>()
+	const router = useRouter()
+	const emit = defineEmits<{ (e: 'complete'): void }>()
 	const currentIndex = ref(TodoStatusEnum.ALL)
 
 	const clickHandle = (value: TodoStatusEnum) => {
 		if (currentIndex.value === value) {
 			return
 		}
+		router.push({
+			path: `/${value}`
+		})
 		currentIndex.value = value
-		emit('change', currentIndex.value)
 	}
 	const completeHandle = () => {
 		Modal.confirm({
@@ -58,6 +63,16 @@
 			}
 		})
 	}
+
+	watch(
+		() => props.status,
+		(newVal: TodoStatusEnum) => {
+			currentIndex.value = newVal
+		},
+		{
+			immediate: true
+		}
+	)
 </script>
 
 <style scoped></style>

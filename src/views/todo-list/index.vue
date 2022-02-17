@@ -13,7 +13,7 @@
 					v-for="list of state.lists"
 					:key="list.id"
 					v-model:checked="list.checked"
-					v-model:value="list.value"
+					v-model:value.trim="list.value"
 					:edited="list.edited"
 					@checkbox-change="(e: Event) => changeHandle(e)"
 					@blur="saveHandle(list.id)"
@@ -25,8 +25,8 @@
 			<!-- footer -->
 			<Footer
 				:num="unCompletedNum"
+				:status="status"
 				:show-clear-btn="showClearBtn"
-				@change="getCurrentData"
 				@complete="completeHandle"
 			/>
 		</div>
@@ -43,23 +43,25 @@
 	import { nanoid } from 'nanoid'
 	import { useSortable } from 'src/hooks/useSortable'
 	import { IState } from '#/todolist'
+	import { useRoute } from 'vue-router'
 
 	const state: IState = reactive({
 		allLists: [],
 		lists: []
 	})
 	// 当前状态
-	let status = TodoStatusEnum.ALL
+	const status = ref(TodoStatusEnum.ALL)
 	// 全选状态
 	const checkAll = ref(false)
 	// 未完成条数
 	const unCompletedNum = ref(0)
 	// 是否展示clear completed按钮
 	const showClearBtn = ref(false)
+	const route = useRoute()
 
 	onMounted(() => {
 		initData()
-		getCurrentData(TodoStatusEnum.ALL)
+		getCurrentData(status.value)
 		sortableHandle()
 	})
 
@@ -83,7 +85,7 @@
 		state.allLists.forEach((item) => {
 			item.checked = (e.target as HTMLInputElement).checked
 		})
-		getCurrentData(status)
+		getCurrentData(status.value)
 	}
 
 	// reverse check
@@ -91,7 +93,7 @@
 		checkAll.value = (e.target as HTMLInputElement).checked
 			? state.allLists.every((list) => list.checked)
 			: false
-		getCurrentData(status)
+		getCurrentData(status.value)
 	}
 
 	// save edit
@@ -119,8 +121,8 @@
 
 	// chang status
 	const getCurrentData = (value: TodoStatusEnum): void => {
-		status = value
-		switch (status) {
+		status.value = value
+		switch (value) {
 			case TodoStatusEnum.ALL:
 				state.lists = state.allLists
 				break
@@ -162,6 +164,18 @@
 		})
 		initSortable()
 	}
+
+	watch(
+		() => route.path,
+		(val) => {
+			status.value = val.slice(1) as TodoStatusEnum
+			console.log(status.value)
+			getCurrentData(status.value)
+		},
+		{
+			immediate: true
+		}
+	)
 
 	watch(
 		() => state.allLists,
