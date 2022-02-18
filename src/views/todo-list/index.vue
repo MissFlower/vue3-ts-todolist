@@ -42,22 +42,24 @@
 	import { onMounted, reactive, ref, watch } from 'vue'
 	import { nanoid } from 'nanoid'
 	import { useSortable } from 'src/hooks/useSortable'
-	import { IState } from '#/todolist'
+	import { IState, ITodo } from '#/todolist'
 	import { useRoute } from 'vue-router'
+	import type { Ref } from 'vue'
+	import type { RouteLocationNormalizedLoaded } from 'vue-router'
 
 	const state: IState = reactive({
 		allLists: [],
 		lists: []
 	})
 	// 当前状态
-	const status = ref(TodoStatusEnum.ALL)
+	const status: Ref<TodoStatusEnum> = ref(TodoStatusEnum.ALL)
 	// 全选状态
-	const checkAll = ref(false)
+	const checkAll: Ref<boolean> = ref(false)
 	// 未完成条数
-	const unCompletedNum = ref(0)
+	const unCompletedNum: Ref<number> = ref(0)
 	// 是否展示clear completed按钮
-	const showClearBtn = ref(false)
-	const route = useRoute()
+	const showClearBtn: Ref<boolean> = ref(false)
+	const route: RouteLocationNormalizedLoaded = useRoute()
 
 	onMounted(() => {
 		initData()
@@ -82,7 +84,7 @@
 
 	// checkall
 	const checkAllHandle = (e: Event): void => {
-		state.allLists.forEach((item) => {
+		state.allLists.forEach((item: ITodo) => {
 			item.checked = (e.target as HTMLInputElement).checked
 		})
 		getCurrentData(status.value)
@@ -91,32 +93,34 @@
 	// reverse check
 	const changeHandle = (e: Event): void => {
 		checkAll.value = (e.target as HTMLInputElement).checked
-			? state.allLists.every((list) => list.checked)
+			? state.allLists.every((list: ITodo) => list.checked)
 			: false
 		getCurrentData(status.value)
 	}
 
+	// get index
+	const getIndex = (id: string): number => {
+		return state.allLists.findIndex((item: ITodo) => item.id === id)
+	}
 	// save edit
 	const saveHandle = (id: string): void => {
-		const index = state.allLists.findIndex((item) => item.id === id)
-		state.allLists[index].edited = false
+		state.allLists[getIndex(id)].edited = false
 	}
 
 	// remove todo
 	const removeHandle = (id: string): void => {
-		const index = state.allLists.findIndex((item) => item.id === id)
-		state.allLists.splice(index, 1)
+		state.allLists.splice(getIndex(id), 1)
 	}
 
 	// edit
 	const openEditHandle = (id: string): void => {
-		const index = state.allLists.findIndex((item) => item.id === id)
-		state.allLists[index].edited = true
+		state.allLists[getIndex(id)].edited = true
 	}
 
 	// allcheck status
 	const changeAllCheckStatus = () => {
-		checkAll.value = state.lists.length > 0 ? state.lists.every((list) => list.checked) : false
+		checkAll.value =
+			state.lists.length > 0 ? state.lists.every((list: ITodo) => list.checked) : false
 	}
 
 	// chang status
@@ -127,10 +131,10 @@
 				state.lists = state.allLists
 				break
 			case TodoStatusEnum.ACTIVE:
-				state.lists = state.allLists.filter((item) => !item.checked)
+				state.lists = state.allLists.filter((item: ITodo) => !item.checked)
 				break
 			case TodoStatusEnum.COMPLETED:
-				state.lists = state.allLists.filter((item) => item.checked)
+				state.lists = state.allLists.filter((item: ITodo) => item.checked)
 				break
 
 			default:
@@ -141,10 +145,9 @@
 
 	// completed
 	const completeHandle = (): void => {
-		const ids = state.allLists.filter((item) => item.checked).map((item) => item.id)
-		ids.forEach((id) => {
-			const index = state.allLists.findIndex((item) => id === item.id)
-			state.allLists.splice(index, 1)
+		const ids = state.allLists.filter((item: ITodo) => item.checked).map((item: ITodo) => item.id)
+		ids.forEach((id: string) => {
+			state.allLists.splice(getIndex(id), 1)
 		})
 		changeAllCheckStatus()
 	}
@@ -158,7 +161,7 @@
 				if (oldIndex === newIndex) {
 					return
 				}
-				const item = state.allLists.splice(oldIndex as number, 1)
+				const item: ITodo[] = state.allLists.splice(oldIndex as number, 1)
 				state.allLists.splice(newIndex as number, 0, ...item)
 			}
 		})
@@ -169,7 +172,6 @@
 		() => route.path,
 		(val) => {
 			status.value = val.slice(1) as TodoStatusEnum
-			console.log(status.value)
 			getCurrentData(status.value)
 		},
 		{
@@ -181,7 +183,7 @@
 		() => state.allLists,
 		() => {
 			saveTodo(state.allLists)
-			unCompletedNum.value = state.allLists.filter((item) => !item.checked).length
+			unCompletedNum.value = state.allLists.filter((item: ITodo) => !item.checked).length
 			showClearBtn.value = unCompletedNum.value < state.allLists.length
 		},
 		{
@@ -189,5 +191,3 @@
 		}
 	)
 </script>
-
-<style lang="scss" scoped></style>

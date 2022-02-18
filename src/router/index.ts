@@ -1,6 +1,8 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import type { RouteRecordRaw } from 'vue-router'
 
+const todoView = import('src/views/todo-list/index.vue')
+
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/',
@@ -9,17 +11,17 @@ const routes: RouteRecordRaw[] = [
 	{
 		path: '/all',
 		name: 'All',
-		component: () => import('src/views/todo-list/index.vue')
+		component: () => todoView
 	},
 	{
 		path: '/active',
 		name: 'Active',
-		component: () => import('src/views/todo-list/index.vue')
+		component: () => todoView
 	},
 	{
 		path: '/completed',
 		name: 'Completed',
-		component: () => import('src/views/todo-list/index.vue')
+		component: () => todoView
 	},
 	{
 		path: '/:pathMatch(.*)*',

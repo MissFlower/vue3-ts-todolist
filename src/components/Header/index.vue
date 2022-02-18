@@ -13,11 +13,12 @@
 <script setup lang="ts">
 	import { ref, defineEmits } from 'vue'
 	import { Input, Checkbox } from 'ant-design-vue'
+	import type { Ref } from 'vue'
 
 	const emit =
 		defineEmits<{ (e: 'add', value: string): void; (e: 'checkAll', value: Event): void }>()
 
-	const keyword = ref('')
+	const keyword: Ref<string> = ref('')
 
 	const addHandle = () => {
 		keyword.value !== '' && emit('add', keyword.value)
@@ -28,5 +29,3 @@
 		emit('checkAll', e)
 	}
 </script>
-
-<style scoped></style>

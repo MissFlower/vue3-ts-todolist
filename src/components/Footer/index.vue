@@ -24,10 +24,12 @@
 	import { TodoStatusEnum } from 'src/enums/todo'
 	import { capitalize } from 'src/utils'
 	import { useRouter } from 'vue-router'
+	import type { Ref } from 'vue'
+	import type { Router } from 'vue-router'
 
 	const props = withDefaults(
 		defineProps<{
-			num: number | string
+			num: number
 			showClearBtn: boolean
 			status: TodoStatusEnum
 		}>(),
@@ -36,9 +38,9 @@
 			showClearBtn: false
 		}
 	)
-	const router = useRouter()
+	const router: Router = useRouter()
 	const emit = defineEmits<{ (e: 'complete'): void }>()
-	const currentIndex = ref(TodoStatusEnum.ALL)
+	const currentIndex: Ref<TodoStatusEnum> = ref(TodoStatusEnum.ALL)
 
 	const clickHandle = (value: TodoStatusEnum) => {
 		if (currentIndex.value === value) {
@@ -74,5 +76,3 @@
 		}
 	)
 </script>
-
-<style scoped></style>

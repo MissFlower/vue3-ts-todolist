@@ -46,18 +46,16 @@
 		(e: 'openEdit'): void
 	}>()
 
-	// 全选
+	// all checked
 	const changeHandle = (e: Event) => {
 		emit('checkboxChange', e)
 	}
-	// 删除
+	// remove
 	const removeHandle = () => {
 		emit('remove')
 	}
-	// 打开编辑状态
+	// open edit status
 	const openEditHandle = () => {
 		emit('openEdit')
 	}
 </script>
-
-<style scoped></style>
