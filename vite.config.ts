@@ -12,6 +12,7 @@ export default defineConfig({
 		open: true,
 		port: 9999
 	},
+	base: '/todo-list/',
 	resolve: {
 		alias: [
 			{
@@ -27,6 +28,21 @@ export default defineConfig({
 				replacement: pathResolve('types') + '/'
 			}
 		]
+	},
+	build: {
+		target: 'es2015',
+		outDir: 'todo-list',
+		terserOptions: {
+			compress: {
+				keep_infinity: true,
+				// 生产环境删除console
+				drop_console: true
+			}
+		},
+		// 关闭brotliSize显示可以稍微缩短打包时间
+		brotliSize: true,
+		// chunk 大小警告的限制（以 kbs 为单位）默认500
+		chunkSizeWarningLimit: 2000
 	},
 	plugins: createVitePlugins()
 })
