@@ -37,7 +37,7 @@ Since TypeScript cannot handle type information for `.vue` imports, they are shi
 - Get the project code
 
 ```
-git clone https://github.com/MissFlower/vue3-ts-todolist
+git clone https://github.com/MissFlower/vue3-ts-todolist.git
 ```
 
 - Installation dependencies
